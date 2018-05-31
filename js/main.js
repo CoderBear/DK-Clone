@@ -6,6 +6,8 @@ var GameState = {
     preload: preload,
     //execute after everything is loaded
     create: create,
+    update: update,
+    // landed: landed
 };
 
 var physics;
@@ -36,16 +38,25 @@ function create() {
     this.ground.body.allowGravity = false;
     this.ground.body.immovable = true;
     
-    var platform = this.add.sprite(0, 300, 'platform');
-    this.game.physics.arcade.enable(platform);
-    platform.body.allowGravity = false;
-    platform.body.immovable = true;
+    this.platform = this.add.sprite(0, 300, 'platform');
+    this.game.physics.arcade.enable(this.platform);
+    this.platform.body.allowGravity = false;
+    this.platform.body.immovable = true;
     
     this.player = this.add.sprite(100, 200, 'player', 3);
     this.player.anchor.setTo(0.5);
     this.player.animations.add('walking', [0, 1, 2, 1], 6, true);
     this.game.physics.arcade.enable(this.player);
     this.player.play('walking');
+}
+
+function update() {
+    this.game.physics.arcade.collide(this.player, this.ground);
+    this.game.physics.arcade.collide(this.player, this.platform);
+}
+
+function landed(player, ground) {
+    console.log('landed');
 }
 
 // initiate the phaser framework
