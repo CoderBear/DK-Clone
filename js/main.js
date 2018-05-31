@@ -18,6 +18,11 @@ function init() {
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
     this.game.physics.arcade.gravity.y = 1000;
+
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+
+    this.RUNNING_SPEED = 180;
+    this.JUMPING_SPEED = 550;
 }
 
 function preload() {
@@ -47,12 +52,27 @@ function create() {
     this.player.anchor.setTo(0.5);
     this.player.animations.add('walking', [0, 1, 2, 1], 6, true);
     this.game.physics.arcade.enable(this.player);
-    this.player.play('walking');
+    // this.player.play('walking');
 }
 
 function update() {
     this.game.physics.arcade.collide(this.player, this.ground);
     this.game.physics.arcade.collide(this.player, this.platform);
+
+    this.player.body.velocity.x = 0;
+
+    // console.log(this.player.body.velocity.x);
+    if(this.cursors.left.isDown) {
+        this.player.body.velocity.x = -this.RUNNING_SPEED;
+        // console.log(this.player.body.velocity.x);
+    } else if(this.cursors.right.isDown) {
+        this.player.body.velocity.x = this.RUNNING_SPEED;
+        // console.log(this.player.body.velocity.x);
+    }
+
+    if(this.cursors.up.isDown && this.player.body.touching.down) {
+        this.player.body.velocity.y = -this.JUMPING_SPEED;
+    }
 }
 
 function landed(player, ground) {
