@@ -65,16 +65,19 @@ function update() {
     this.player.body.velocity.x = 0;
 
     // console.log(this.player.body.velocity.x);
-    if(this.cursors.left.isDown) {
+    if(this.cursors.left.isDown || this.player.customParams.isMovingLeft) {
         this.player.body.velocity.x = -this.RUNNING_SPEED;
+        // this.player.customParams.isMovingLeft = false;
         // console.log(this.player.body.velocity.x);
-    } else if(this.cursors.right.isDown) {
+    } else if(this.cursors.right.isDown || this.player.customParams.isMovingRight) {
         this.player.body.velocity.x = this.RUNNING_SPEED;
+        // this.player.customParams.isMovingRight = false;
         // console.log(this.player.body.velocity.x);
     }
 
-    if(this.cursors.up.isDown && this.player.body.touching.down) {
+    if((this.cursors.up.isDown || this.player.customParams.mustJump) && this.player.body.touching.down) {
         this.player.body.velocity.y = -this.JUMPING_SPEED;
+        this.player.customParams.mustJump = false;
     }
 }
 
@@ -90,6 +93,45 @@ function createOnscreenControls() {
     this.leftArrow.alpha = 0.5;
     this.rightArrow.alpha = 0.5;
     this.actionButton.alpha = 0.5;
+
+    //jump
+    this.actionButton.events.onInputDown.add(function(){
+        this.player.customParams.mustJump = true;
+    }, this);
+
+    this.actionButton.events.onInputUp.add(function(){
+        this.player.customParams.mustJump = false;
+    }, this);
+
+    // left
+    this.leftArrow.events.onInputDown.add(function(){
+        this.player.customParams.isMovingLeft = true;
+    }, this);
+    this.leftArrow.events.onInputUp.add(function(){
+        this.player.customParams.isMovingLeft = false;
+    }, this);
+
+    this.leftArrow.events.onInputOver.add(function(){
+        this.player.customParams.isMovingLeft = true;
+    }, this);
+    this.leftArrow.events.onInputOut.add(function(){
+        this.player.customParams.isMovingLeft = false;
+    }, this);
+
+    // right
+    this.rightArrow.events.onInputDown.add(function(){
+        this.player.customParams.isMovingRight = true;
+    }, this);
+    this.rightArrow.events.onInputUp.add(function(){
+        this.player.customParams.isMovingRight = false;
+    }, this);
+
+    this.rightArrow.events.onInputOver.add(function(){
+        this.player.customParams.isMovingRight = true;
+    }, this);
+    this.rightArrow.events.onInputOut.add(function(){
+        this.player.customParams.isMovingRight = false;
+    }, this);
 }
 
 // initiate the phaser framework
