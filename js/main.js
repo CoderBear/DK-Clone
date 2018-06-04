@@ -7,7 +7,7 @@ var GameState = {
     //execute after everything is loaded
     create: create,
     update: update,
-    // landed: landed
+    createOnscreenControls: createOnscreenControls,
 };
 
 var physics;
@@ -52,7 +52,10 @@ function create() {
     this.player.anchor.setTo(0.5);
     this.player.animations.add('walking', [0, 1, 2, 1], 6, true);
     this.game.physics.arcade.enable(this.player);
+    this.player.customParams = {};
     // this.player.play('walking');
+
+    this.createOnscreenControls();
 }
 
 function update() {
@@ -77,6 +80,16 @@ function update() {
 
 function landed(player, ground) {
     console.log('landed');
+}
+
+function createOnscreenControls() {
+    this.leftArrow = this.add.button(20, 535, 'arrowButton');
+    this.rightArrow = this.add.button(110, 535, 'arrowButton');
+    this.actionButton = this.add.button(280, 535, 'actionButton');
+
+    this.leftArrow.alpha = 0.5;
+    this.rightArrow.alpha = 0.5;
+    this.actionButton.alpha = 0.5;
 }
 
 // initiate the phaser framework
