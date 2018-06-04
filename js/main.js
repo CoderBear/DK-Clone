@@ -22,6 +22,8 @@ function init() {
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
+    this.game.world.setBounds(0,0,360,700);
+
     this.RUNNING_SPEED = 180;
     this.JUMPING_SPEED = 550;
 }
@@ -39,7 +41,7 @@ function preload() {
 }
 
 function create() {
-    this.ground = this.add.sprite(0, 500, 'ground');
+    this.ground = this.add.sprite(0, 638, 'ground');
     this.game.physics.arcade.enable(this.ground);
     this.ground.body.allowGravity = false;
     this.ground.body.immovable = true;
@@ -61,12 +63,13 @@ function create() {
     this.platforms.setAll('body.immovable', true);
     this.platforms.setAll('body.allowGravity', false);
     
-    this.player = this.add.sprite(100, 200, 'player', 3);
+    this.player = this.add.sprite(10, 545, 'player', 3);
     this.player.anchor.setTo(0.5);
     this.player.animations.add('walking', [0, 1, 2, 1], 6, true);
     this.game.physics.arcade.enable(this.player);
     this.player.customParams = {};
-    // this.player.play('walking');
+
+    this.game.camera.follow(this.player);
 
     this.createOnscreenControls();
 }
@@ -106,6 +109,10 @@ function createOnscreenControls() {
     this.leftArrow.alpha = 0.5;
     this.rightArrow.alpha = 0.5;
     this.actionButton.alpha = 0.5;
+
+    this.leftArrow.fixedToCamera = true;
+    this.rightArrow.fixedToCamera = true;
+    this.actionButton.fixedToCamera = true;
 
     //jump
     this.actionButton.events.onInputDown.add(function(){
