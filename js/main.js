@@ -18,6 +18,15 @@ var GameState = {
     win: function(player, goal) {
         alert('you win!');
         game.state.start('GameState');
+    },
+    createBarrel: function(){
+        var barrel = this.barrels.getFirstExists(false);
+
+        if(!barrel) {
+            barrel = this.barrels.create(0,0,'barrel');
+        }
+
+        barrel.reset(this.levelData.goal.x, this.levelData.goal.y);
     }
 };
 
@@ -96,6 +105,12 @@ function create() {
     this.game.camera.follow(this.player);
 
     this.createOnscreenControls();
+
+    this.barrels = this.add.group();
+    this.barrels.enableBody = true;
+
+    this.barrelCreator = this.game.time.events.loop(Phaser.Time.SECOND * this.levelData.barrelFrequency,
+        this.createBarrel, this);
 }
 
 function update() {
