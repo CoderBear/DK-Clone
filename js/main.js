@@ -79,15 +79,19 @@ function update() {
 
     this.player.body.velocity.x = 0;
 
-    // console.log(this.player.body.velocity.x);
     if(this.cursors.left.isDown || this.player.customParams.isMovingLeft) {
         this.player.body.velocity.x = -this.RUNNING_SPEED;
-        // this.player.customParams.isMovingLeft = false;
-        // console.log(this.player.body.velocity.x);
+        this.player.scale.setTo(1,1);
+        this.player.play('walking');
     } else if(this.cursors.right.isDown || this.player.customParams.isMovingRight) {
         this.player.body.velocity.x = this.RUNNING_SPEED;
+        this.player.scale.setTo(-1,1);
+        this.player.play('walking');
         // this.player.customParams.isMovingRight = false;
         // console.log(this.player.body.velocity.x);
+    } else {
+        this.player.animations.stop();
+        this.player.frame = 3;
     }
 
     if((this.cursors.up.isDown || this.player.customParams.mustJump) && this.player.body.touching.down) {
